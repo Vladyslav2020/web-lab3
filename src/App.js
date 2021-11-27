@@ -25,9 +25,8 @@ function App() {
     const hideLoader = () => {
         setLoading(false);
     };
-    if (!queryService) {
-        queryService = new QueryService(showLoader, hideLoader);
-    }
+
+    queryService = new QueryService(showLoader, hideLoader);
 
     const stateService = new StateService(state, setState, queryService);
 
