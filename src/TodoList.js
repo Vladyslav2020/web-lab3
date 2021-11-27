@@ -24,7 +24,7 @@ const TodoList = ({
             if (filter === 'active' && !item.completed) return true;
             return false;
         })
-        .sort((a, b) => a.id.localeCompare(b.id))
+        .sort((a, b) => a.title.localeCompare(b.title))
         .map((item, index) => (
             <tr className="d-flex" key={item.id}>
                 <th

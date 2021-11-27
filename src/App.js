@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import TodosListPage from './TodoListPage';
 import { StateService } from './StateService';
 import { QueryService } from './QueryService';
+import Loader from './Loader';
 
-let queryService = new QueryService();
+let queryService;
 
 function App() {
-    let [state, setState] = useState({
+    const [loading, setLoading] = useState(false);
+    const [state, setState] = useState({
         todos: [],
         editableTodo: {
             id: null,
@@ -16,7 +18,18 @@ function App() {
         },
     });
 
-    let stateService = new StateService(state, setState, queryService);
+    const showLoader = () => {
+        setLoading(true);
+    };
+
+    const hideLoader = () => {
+        setLoading(false);
+    };
+    if (!queryService) {
+        queryService = new QueryService(showLoader, hideLoader);
+    }
+
+    const stateService = new StateService(state, setState, queryService);
 
     useEffect(() => {
         stateService.downloadTodos();
@@ -30,9 +43,11 @@ function App() {
                 setEditableTodoTitle={stateService.setEditableTodoTitle}
                 setEditableTodoCompleted={stateService.setEditableTodoCompleted}
                 clearEditableTodo={stateService.clearEditableTodo}
+                addNewTodo={stateService.addTodo}
                 updateTodo={stateService.updateTodo}
                 deleteTodo={stateService.deleteTodo}
             />
+            {loading && <Loader />}
         </div>
     );
 }

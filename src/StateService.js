@@ -56,6 +56,11 @@ export class StateService {
         }));
     };
 
+    addTodo = async ({ title }) => {
+        await this.queryService.addTodo({ title });
+        await this.downloadTodos();
+    };
+
     downloadTodos = async () => {
         const todos = await this.queryService.fetchTodos();
         this.updateTodos(todos);

@@ -10,6 +10,11 @@ export class QueryService {
       }
     `;
 
+    constructor(showLoader, hideLoader) {
+        this.showLoader = showLoader;
+        this.hideLoader = hideLoader;
+    }
+
     async fetchTodos() {
         const { errors, data } = await this.processQuery(
             QueryService.downloadQuery,
@@ -19,6 +24,24 @@ export class QueryService {
             console.error(errors);
         }
         return data.todos;
+    }
+
+    async addTodo({ title }) {
+        const addQuery = `
+          mutation AddTodo {
+            insert_todos(objects: {title: "${title}"}) {
+              returning {
+                id
+                title
+              }
+            }
+          }
+        `;
+        const { errors, data } = await this.processQuery(addQuery, 'AddTodo');
+        if (errors) {
+            console.error(errors);
+        }
+        return data;
     }
 
     async updateTodo({ id, title, completed }) {
@@ -67,8 +90,9 @@ export class QueryService {
         return this.fetchGraphQL(query, operationName, {});
     }
 
-    async fetchGraphQL(queryString, operationName, variables) {
-        const result = await fetch(
+    fetchGraphQL = async (queryString, operationName, variables) => {
+        this.showLoader();
+        const response = await fetch(
             'https://heroku-app-lab3.herokuapp.com/v1/graphql',
             {
                 method: 'POST',
@@ -79,7 +103,8 @@ export class QueryService {
                 }),
             },
         );
-
-        return await result.json();
-    }
+        const data = await response.json();
+        setTimeout(() => this.hideLoader(), 300);
+        return data;
+    };
 }

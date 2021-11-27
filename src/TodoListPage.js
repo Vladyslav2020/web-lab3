@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TodoList from './TodoList';
+import AddTodoItem from './AddTodoItem';
 
 const TodosListPage = ({
     todos,
@@ -8,6 +9,7 @@ const TodosListPage = ({
     setEditableTodoTitle,
     setEditableTodoCompleted,
     clearEditableTodo,
+    addNewTodo,
     updateTodo,
     deleteTodo,
 }) => {
@@ -15,7 +17,9 @@ const TodosListPage = ({
     const tabsDisplay = todos.length !== 0 ? '' : 'none';
     return (
         <div className="container mt-3">
-            <div className="container">{/*<AddTodoItem />*/}</div>
+            <div className="container">
+                <AddTodoItem addNewTodo={addNewTodo} />
+            </div>
             <div className="container">
                 <div className="container text-center my-3 ">
                     <h3 style={{ color: '#0d6efd' }}>Todo list</h3>
