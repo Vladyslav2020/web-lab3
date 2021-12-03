@@ -1,3 +1,5 @@
+import { Config } from './Config';
+
 export class QueryService {
     static downloadQuery = `
       query DownloadTodos {
@@ -10,9 +12,11 @@ export class QueryService {
       }
     `;
 
-    constructor(showLoader, hideLoader) {
+    constructor(showLoader, hideLoader, showMessage, hideMessage) {
         this.showLoader = showLoader;
         this.hideLoader = hideLoader;
+        this.showMessage = showMessage;
+        this.hideMessage = hideMessage;
     }
 
     async fetchTodos() {
@@ -20,8 +24,14 @@ export class QueryService {
             QueryService.downloadQuery,
             'DownloadTodos',
         );
-        if (errors) {
+        if (errors || !data) {
+            this.showMessage({
+                message: 'Failed to fetch todos.',
+                type: 'danger',
+            });
+            setTimeout(this.hideMessage, 3000);
             console.error(errors);
+            return null;
         }
         return data.todos;
     }
@@ -38,9 +48,20 @@ export class QueryService {
           }
         `;
         const { errors, data } = await this.processQuery(addQuery, 'AddTodo');
-        if (errors) {
+        if (errors || !data) {
+            this.showMessage({
+                message: 'Failed to add new todo.',
+                type: 'danger',
+            });
+            setTimeout(this.hideMessage, 3000);
             console.error(errors);
+            return null;
         }
+        this.showMessage({
+            message: 'The new todo has been successfully added.',
+            type: 'success',
+        });
+        setTimeout(this.hideMessage, 3000);
         return data;
     }
 
@@ -60,9 +81,20 @@ export class QueryService {
             updateQuery,
             'UpdateTodo',
         );
-        if (errors) {
+        if (errors || !data) {
+            this.showMessage({
+                message: 'Failed to update the todo.',
+                type: 'danger',
+            });
+            setTimeout(this.hideMessage, 3000);
             console.error(errors);
+            return null;
         }
+        this.showMessage({
+            message: 'Todo updated successfully.',
+            type: 'success',
+        });
+        setTimeout(this.hideMessage, 3000);
         return data;
     }
 
@@ -80,9 +112,20 @@ export class QueryService {
             deleteQuery,
             'DeleteTodo',
         );
-        if (errors) {
+        if (errors || !data) {
+            this.showMessage({
+                message: 'Failed to delete the todo.',
+                type: 'danger',
+            });
+            setTimeout(this.hideMessage, 3000);
             console.error(errors);
+            return null;
         }
+        this.showMessage({
+            message: 'Todo deleted successfully.',
+            type: 'success',
+        });
+        setTimeout(this.hideMessage, 3000);
         return data;
     }
 
@@ -92,18 +135,21 @@ export class QueryService {
 
     fetchGraphQL = async (queryString, operationName, variables) => {
         this.showLoader();
-        const response = await fetch(
-            'https://heroku-app-lab3.herokuapp.com/v1/graphql',
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    query: queryString,
-                    variables: variables,
-                    operationName: operationName,
-                }),
-            },
-        );
-        const data = await response.json();
+        const response = await fetch(Config.url, {
+            method: 'POST',
+            body: JSON.stringify({
+                query: queryString,
+                variables: variables,
+                operationName: operationName,
+            }),
+        });
+        let data = null;
+        try {
+            data = await response.json();
+        } catch (err) {
+            this.showMessage({ message: err.message, type: 'danger' });
+            setTimeout(this.hideMessage, 3000);
+        }
         setTimeout(() => this.hideLoader(), 300);
         return data;
     };

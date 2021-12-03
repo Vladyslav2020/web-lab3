@@ -3,11 +3,11 @@ import TodosListPage from './TodoListPage';
 import { StateService } from './StateService';
 import { QueryService } from './QueryService';
 import Loader from './Loader';
-
-let queryService;
+import Message from './Message';
 
 function App() {
     const [loading, setLoading] = useState(false);
+    const [report, setReport] = useState({ message: '', type: '' });
     const [state, setState] = useState({
         todos: [],
         editableTodo: {
@@ -26,7 +26,20 @@ function App() {
         setLoading(false);
     };
 
-    queryService = new QueryService(showLoader, hideLoader);
+    const showMessage = ({ type, message }) => {
+        setReport({ type, message });
+    };
+
+    const hideMessage = () => {
+        setReport({ message: '', type: '' });
+    };
+
+    const queryService = new QueryService(
+        showLoader,
+        hideLoader,
+        showMessage,
+        hideMessage,
+    );
 
     const stateService = new StateService(state, setState, queryService);
 
@@ -35,6 +48,11 @@ function App() {
     }, []);
     return (
         <div className="App">
+            <Message
+                type={report.type}
+                message={report.message}
+                hideMessage={hideMessage}
+            />
             <TodosListPage
                 todos={state.todos}
                 editableTodo={state.editableTodo}

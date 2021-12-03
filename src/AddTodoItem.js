@@ -18,7 +18,7 @@ const AddTodoItem = ({ addNewTodo }) => {
             <div className="container text-center my-3 ">
                 <h3 style={{ color: '#0d6efd' }}>Add new Todo</h3>
             </div>
-            <form className="container" method="POST" onSubmit={submitHandler}>
+            <form className="container" onSubmit={submitHandler}>
                 <div className="input-group mb-3">
                     <input
                         type="text"

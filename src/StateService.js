@@ -57,28 +57,34 @@ export class StateService {
     };
 
     addTodo = async ({ title }) => {
-        await this.queryService.addTodo({ title });
-        await this.downloadTodos();
+        const newTodo = await this.queryService.addTodo({ title });
+        if (newTodo) {
+            await this.downloadTodos();
+        }
     };
 
     downloadTodos = async () => {
         const todos = await this.queryService.fetchTodos();
-        this.updateTodos(todos);
+        if (todos) {
+            this.updateTodos(todos);
+        }
     };
 
     updateTodo = async () => {
-        await this.queryService.updateTodo({
-            id: this.state.editableTodo.id,
-            title: this.state.editableTodo.title,
-            completed: this.state.editableTodo.completed,
+        const updatedTodo = await this.queryService.updateTodo({
+            ...this.state.editableTodo,
         });
-        await this.downloadTodos();
-        this.clearEditableTodo();
+        if (updatedTodo) {
+            await this.downloadTodos();
+            this.clearEditableTodo();
+        }
     };
 
     deleteTodo = async ({ id }) => {
-        await this.queryService.deleteTodo({ id });
-        await this.downloadTodos();
-        this.clearEditableTodo();
+        const todo = await this.queryService.deleteTodo({ id });
+        if (todo) {
+            await this.downloadTodos();
+            this.clearEditableTodo();
+        }
     };
 }

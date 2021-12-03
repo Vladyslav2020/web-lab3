@@ -125,9 +125,7 @@ const TodoList = ({
                                 onClick={() =>
                                     editableTodo.id !== item.id
                                         ? setEditableTodoId({
-                                              id: item.id,
-                                              title: item.title,
-                                              completed: item.completed,
+                                              ...item,
                                           })
                                         : clearEditableTodo()
                                 }

@@ -32,6 +32,5 @@
         "no-multiple-empty-lines": "warn",
         "prefer-const": "warn",
         "no-use-before-define": "warn"
-    },
-    "ignorePatterns": ["./client/build/**/*.js", "**/build/*.js"]
+    }
 }
