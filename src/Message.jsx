@@ -3,8 +3,9 @@ import { CSSTransition } from 'react-transition-group';
 import './index.css';
 
 const Message = ({ type, message, hideMessage }) => {
-    const _className =
-        'alert-dismissible message fade show alert alert-' + type;
+    const className = type
+        ? 'alert-dismissible message fade show alert alert-' + type
+        : 'alert-dismissible message fade show alert';
     return (
         <CSSTransition
             in={type.length > 0}
@@ -13,14 +14,14 @@ const Message = ({ type, message, hideMessage }) => {
             mountOnEnter
             unmountOnExit
         >
-            <div className={_className} role="alert">
+            <div className={className} role="alert">
                 <strong>Attention!! </strong>
                 {message}
                 <button
                     className="btn-close"
                     data-bs-dismiss="alert"
                     aria-label="Close"
-                    onClick={() => hideMessage()}
+                    onClick={hideMessage}
                 ></button>
             </div>
         </CSSTransition>
