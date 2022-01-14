@@ -22,7 +22,7 @@ const TodosListPage = ({
             </div>
             <div className="container">
                 <div className="container text-center my-3 ">
-                    <h3 style={{ color: '#0d6efd' }}>Todo list</h3>
+                    <h3>Todo list</h3>
                 </div>
                 <ul
                     style={{ display: tabsDisplay }}
