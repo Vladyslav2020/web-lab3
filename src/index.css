@@ -1,4 +1,3 @@
-/* prettier-ignore */
 body {
   margin: 0;
   padding: 0;
@@ -37,4 +36,8 @@ body {
   transition: left 400ms linear, opacity 200ms linear;
   left: -500px;
   opacity: 0%;
+}
+
+.h3 {
+  color: #0d6efd;
 }

@@ -16,7 +16,7 @@ const AddTodoItem = ({ addNewTodo }) => {
     return (
         <React.Fragment>
             <div className="container text-center my-3 ">
-                <h3 style={{ color: '#0d6efd' }}>Add new Todo</h3>
+                <h3>Add new Todo</h3>
             </div>
             <form className="container" onSubmit={submitHandler}>
                 <div className="input-group mb-3">
